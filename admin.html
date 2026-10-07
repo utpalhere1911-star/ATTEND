@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - Attendance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-layout hidden" id="admin-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="brand-name">Admin Portal</span>
+                <button class="mobile-close" id="mobile-close-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">MAIN</div>
+                <button class="nav-item active" data-view="overview">Overview</button>
+                <button class="nav-item" data-view="attendance">Attendance</button>
+                <button class="nav-item" data-view="reports">Reports</button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="admin-identity">
+                    <div class="admin-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                    <span class="admin-name" id="admin-display-name">Administrator</span>
+                </div>
+                <button class="nav-link-external" id="btn-logout" style="border:none;background:none;width:100%;text-align:left;cursor:pointer;padding-top:12px;margin-top:12px;border-top:1px solid var(--color-border);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="mobile-menu-trigger">
+                    <button id="mobile-menu-btn" class="icon-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <span class="page-title" id="mobile-page-title">Overview</span>
+                </div>
+            </header>
+
+            <div class="content-scroll">
+                <!-- VIEW: OVERVIEW -->
+                <section id="view-overview" class="view-section active">
+                    <div class="section-header">
+                        <div>
+                            <h1 class="page-title">Overview</h1>
+                            <p class="page-description">Live operational status.</p>
+                        </div>
+                    </div>
+
+                    <div class="overview-grid mt-6" id="overview-content">
+                        <!-- Populated by JS -->
+                        <div class="editorial-empty">
+                            <p class="editorial-text">Loading overview...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: ATTENDANCE (List of sessions) -->
+                <section id="view-attendance" class="view-section">
+                    <div class="section-header">
+                        <div>
+                            <h1 class="page-title">Attendance Sessions</h1>
+                            <p class="page-description">Manage and review all classroom sessions.</p>
+                        </div>
+                        <button class="btn-primary" id="btn-start-session">+ Start Session</button>
+                    </div>
+                    
+                    <div class="table-container mt-6">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>DATE</th>
+                                    <th>SUBJECT</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="session-list-tbody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- VIEW: SESSION DETAILS -->
+                <section id="view-session-details" class="view-section">
+                    <div class="breadcrumbs">
+                        <button class="link-btn" data-nav="attendance">← Back to Sessions</button>
+                    </div>
+                    
+                    <div class="section-header align-start mt-4">
+                        <div>
+                            <h1 class="page-title" id="sd-subject">Loading...</h1>
+                            <p class="page-description" id="sd-date">-</p>
+                            <div class="mt-2 text-sm text-secondary">Attendance Code: <strong id="sd-code" class="text-primary">-</strong></div>
+                            <div class="status-badge mt-2" id="sd-status-badge">...</div>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn-secondary" id="btn-add-student-manual">+ Add Student</button>
+                            <button class="btn-secondary" id="btn-download-pdf-session">Download PDF</button>
+                            <button class="btn-danger" id="btn-end-attendance">End Session</button>
+                        </div>
+                    </div>
+
+                    <div class="summary-stats mt-6">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Submissions</span>
+                            <span class="stat-value" id="sd-total">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Verified</span>
+                            <span class="stat-value text-success" id="sd-verified">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Duplicates / Review</span>
+                            <span class="stat-value text-warning" id="sd-review">-</span>
+                        </div>
+                    </div>
+
+                    <div class="table-container mt-6">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ROLL NUMBER</th>
+                                    <th>STUDENT NAME</th>
+                                    <th>SUBMISSION TIME</th>
+                                    <th>STATUS</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sd-students-tbody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- VIEW: SUBMISSION DETAILS -->
+                <section id="view-submission-details" class="view-section">
+                    <div class="breadcrumbs">
+                        <button class="link-btn" data-nav="back-to-session">← Back to Session</button>
+                    </div>
+
+                    <div class="submission-grid mt-4">
+                        <div class="submission-info">
+                            <h1 class="page-title">Submission Review</h1>
+                            
+                            <div class="detail-list mt-6">
+                                <div class="detail-group">
+                                    <label>Student Name</label>
+                                    <p id="sub-name" class="font-medium">-</p>
+                                </div>
+                                <div class="detail-group">
+                                    <label>Roll Number</label>
+                                    <p id="sub-roll" class="font-medium">-</p>
+                                </div>
+                                <div class="detail-group">
+                                    <label>Submission Time</label>
+                                    <p id="sub-time">-</p>
+                                </div>
+                                <div class="detail-group">
+                                    <label>Verification Status</label>
+                                    <div class="status-badge inline-flex mt-1" id="sub-status">-</div>
+                                </div>
+                            </div>
+                            
+                            <div class="actions-group mt-8">
+                                <label class="text-sm text-secondary block mb-2">Change Status</label>
+                                <div class="flex-gap">
+                                    <button class="btn-secondary" id="btn-mark-verified">Mark as Verified</button>
+                                    <button class="btn-secondary" id="btn-mark-duplicate">Mark as Duplicate</button>
+                                </div>
+                            </div>
+                            
+                            <div class="actions-group mt-8">
+                                <label class="text-sm text-secondary block mb-2">Student History</label>
+                                <button class="btn-secondary" id="btn-view-student-history">View Student Details</button>
+                            </div>
+                        </div>
+                        
+                        <div class="submission-photo">
+                            <h3 class="text-sm font-medium mb-3">Blackboard Photo</h3>
+                            <div class="photo-frame" id="sub-photo-container">
+                                <div class="mock-image">Loading photo...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: STUDENT DETAILS -->
+                <section id="view-student-details" class="view-section">
+                    <div class="breadcrumbs">
+                        <button class="link-btn" data-nav="back-to-session">← Back to Session</button>
+                    </div>
+
+                    <div class="section-header mt-4">
+                        <div>
+                            <h1 class="page-title text-uppercase" id="stud-name">-</h1>
+                            <p class="page-description">Roll Number: <span id="stud-roll">-</span></p>
+                        </div>
+                    </div>
+
+                    <div class="summary-stats mt-6">
+                        <div class="stat-item">
+                            <span class="stat-label">Present</span>
+                            <span class="stat-value text-success" id="stud-present">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Absent</span>
+                            <span class="stat-value text-danger" id="stud-absent">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Attendance %</span>
+                            <span class="stat-value text-accent" id="stud-percent">-</span>
+                        </div>
+                    </div>
+
+                    <h2 class="section-subtitle mt-8">Attendance History</h2>
+                    <div class="table-container mt-4">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>DATE</th>
+                                    <th>SUBJECT</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stud-history-tbody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- VIEW: REPORTS -->
+                <section id="view-reports" class="view-section">
+                    <div class="section-header">
+                        <div>
+                            <h1 class="page-title">Reports</h1>
+                            <p class="page-description">Export verified attendance records.</p>
+                        </div>
+                    </div>
+
+                    <div class="reports-container mt-6">
+                        <div class="report-card">
+                            <h3 class="font-medium mb-2">Export Session Report</h3>
+                            <p class="text-secondary text-sm mb-4">Download a PDF containing the roll numbers and names of verified students for a specific session.</p>
+                            <div class="form-group mb-4">
+                                <label>Select Session</label>
+                                <select id="report-session-select" class="form-control">
+                                    <option value="">Loading sessions...</option>
+                                </select>
+                            </div>
+                            <div id="report-stats" class="mb-4 hidden">
+                                <p class="text-sm mb-2"><strong>Code:</strong> <span id="rs-code" class="text-primary">-</span></p>
+                                <p class="text-sm"><strong>Total:</strong> <span id="rs-total">0</span> | <strong>Verified:</strong> <span id="rs-verified" class="text-success">0</span></p>
+                            </div>
+                            <button class="btn-primary" id="btn-export-pdf">Generate PDF</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL: Admin Login -->
+    <div class="modal-overlay" id="modal-login">
+        <div class="modal-content login-modal">
+            <div class="login-header">
+                <h1 class="login-brand">ATTEND.</h1>
+                <p class="login-subtitle">Restricted Administrator Access</p>
+            </div>
+            <div class="modal-body">
+                <form id="form-login">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" class="form-control" required placeholder="admin@university.edu">
+                    </div>
+                    <div class="form-group mt-4">
+                        <label for="login-password">Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="login-password" class="form-control" required placeholder="••••••••">
+                            <button type="button" class="btn-toggle-password" id="btn-toggle-password">Show</button>
+                        </div>
+                    </div>
+                    <div class="form-actions mt-6">
+                        <button type="submit" class="btn-primary w-full btn-large" id="btn-login-submit">
+                            <span class="btn-text-content">Sign In</span>
+                            <span class="btn-loader hidden"></span>
+                        </button>
+                    </div>
+                    <div id="login-error" class="login-error hidden"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Start Session -->
+    <div class="modal-overlay hidden" id="modal-start-session">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Start New Session</h2>
+                <button class="icon-btn modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-start-session">
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" id="new-session-subject" class="form-control" required placeholder="e.g. Data Structures">
+                    </div>
+                    <div class="form-group mt-4">
+                        <label>Date</label>
+                        <input type="date" id="new-session-date" class="form-control" required>
+                    </div>
+                    <div class="form-group mt-4">
+                        <label>Attendance Code</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="new-session-code" class="form-control" required style="text-transform: uppercase;">
+                            <button type="button" class="btn-secondary" id="btn-generate-code" title="Generate New Code">↻ Generate</button>
+                        </div>
+                    </div>
+                    <div class="form-actions mt-6">
+                        <button type="submit" class="btn-primary w-full">Start Session</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Add Student Manually -->
+    <div class="modal-overlay hidden" id="modal-add-student">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Student</h2>
+                <button class="icon-btn modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-add-student">
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <input type="text" id="add-student-name" class="form-control" required placeholder="Enter student name">
+                    </div>
+                    <div class="form-group mt-4">
+                        <label>Roll Number</label>
+                        <input type="text" id="add-student-roll" class="form-control" required placeholder="Enter roll number">
+                    </div>
+                    <div class="form-group mt-4">
+                        <label>Status</label>
+                        <select id="add-student-status" class="form-control" required>
+                            <option value="verified">Verified</option>
+                            <option value="duplicate">Duplicate</option>
+                        </select>
+                    </div>
+                    <div class="form-actions mt-6">
+                        <button type="submit" class="btn-primary w-full">Add Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

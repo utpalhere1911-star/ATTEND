@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATTEND. - Classroom Verification</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="editorial-bg">
+
+
+    <div class="app-wrapper">
+        <header class="app-header">
+            <div class="header-brand">ATTEND.</div>
+            <div class="header-status">STUDENT</div>
+        </header>
+
+        <main class="main-content">
+            
+            <!-- View: No Session -->
+            <section id="view-none" class="view-section hidden">
+                <div class="editorial-empty">
+                    <h1 class="huge-title">NO ATTENDANCE SESSION</h1>
+                    <div class="editorial-divider"></div>
+                    <p class="editorial-text">There is no attendance session available right now.</p>
+                    <p class="editorial-meta">CHECK BACK WHEN YOUR CLASS SESSION BEGINS.</p>
+                </div>
+            </section>
+
+            <!-- View: Session Closed -->
+            <section id="view-closed" class="view-section hidden">
+                <div class="editorial-empty">
+                    <h2 class="subject-title mb-2" id="closed-subject">DATA STRUCTURES</h2>
+                    <p class="editorial-meta mb-8" id="closed-date">06 OCT 2026</p>
+
+                    <h1 class="huge-title">ATTENDANCE SESSION ENDED</h1>
+                    <div class="editorial-divider"></div>
+                    
+                    <p class="editorial-text">Attendance for this session is no longer available.</p>
+                </div>
+            </section>
+
+            <!-- View: Success -->
+            <section id="view-success" class="view-section hidden">
+                <div class="editorial-success">
+                    <h1 class="huge-title">ATTENDANCE<br>SUBMITTED</h1>
+                    <div class="success-check">✓</div>
+                    <p class="editorial-text mt-8">Your attendance has been submitted for verification.</p>
+                    
+                    <div class="submission-meta mt-8">
+                        <div class="meta-block">
+                            <span class="meta-label">SUBJECT</span>
+                            <span class="meta-value" id="success-subject">Data Structures</span>
+                        </div>
+                        <div class="meta-block">
+                            <span class="meta-label">DATE</span>
+                            <span class="meta-value" id="success-date">06 OCT 2026</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- View: Attendance Open -->
+            <section id="view-open" class="view-section">
+                
+                <!-- Hero -->
+                <div class="hero-section">
+                    <div class="live-indicator active">
+                        <span class="dot"></span> LIVE SESSION
+                    </div>
+                    
+                    <h1 class="subject-title" id="session-subject">DATA<br>STRUCTURES</h1>
+                    
+                    <div class="hero-metadata">
+                        <div class="meta-col">
+                            <span class="meta-label">DATE</span>
+                            <span class="meta-value" id="session-date">06 OCT 2026</span>
+                        </div>
+                        <div class="meta-col">
+                            <span class="meta-label">SESSION</span>
+                            <span class="meta-value">CLASSROOM ATTENDANCE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="editorial-divider-full"></div>
+
+                <!-- Form -->
+                <form id="attendance-form" class="editorial-form" novalidate>
+                    
+                    <div class="form-section">
+                        <div class="section-number">01</div>
+                        <div class="section-content">
+                            <label for="student-name" class="editorial-label">YOUR NAME</label>
+                            <input type="text" id="student-name" class="editorial-input" placeholder="Enter your full name" required>
+                            <span class="error-msg" id="error-name">Please enter your name.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="section-number">02</div>
+                        <div class="section-content">
+                            <label for="roll-number" class="editorial-label">ROLL NUMBER</label>
+                            <input type="text" id="roll-number" class="editorial-input" placeholder="Enter your university roll number" required>
+                            <span class="error-msg" id="error-roll">Please enter your roll number.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="section-number">03</div>
+                        <div class="section-content">
+                            <label class="editorial-label">CLASSROOM PROOF</label>
+                            
+                            <div class="upload-container" id="upload-container">
+                                <!-- Inputs -->
+                                <input type="file" id="photo-camera" accept="image/jpeg,image/png,image/webp" capture="environment" class="file-hidden">
+                                
+                                <!-- Initial State -->
+                                <div class="upload-actions" id="upload-actions">
+                                    <button type="button" class="btn-camera" id="btn-take-photo">
+                                        <span class="camera-icon">📷</span> TAKE BLACKBOARD PHOTO
+                                    </button>
+                                </div>
+                                
+                                <!-- Preview State -->
+                                <div class="upload-preview hidden" id="upload-preview">
+                                    <div class="preview-header">
+                                        <span class="preview-status">✓ PHOTO READY</span>
+                                        <div class="preview-actions-row">
+                                            <button type="button" class="btn-text" id="btn-retake">Retake</button>
+                                        </div>
+                                    </div>
+                                    <div class="preview-image-wrapper">
+                                        <img id="preview-img" src="" alt="Blackboard">
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="error-msg" id="error-photo">Please upload the classroom Blackboard photo.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-editorial" id="btn-submit">
+                            <span class="btn-text-content">SUBMIT ATTENDANCE</span>
+                            <span class="btn-arrow">→</span>
+                            <span class="btn-loader hidden"></span>
+                        </button>
+                    </div>
+
+                </form>
+
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
